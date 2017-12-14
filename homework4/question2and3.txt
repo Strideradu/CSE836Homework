@@ -1,0 +1,50 @@
+question 2:
+k 12 perm 512 threshold 0.01
+
+Total pairs: 473851.0, Expected Overlap: 21017, Total report: 156401, True Positive: 6839
+sensitivity 0.32540324499214923
+FPR 0.3302799701435846
+accuracy 0.04372734189679094
+F1 0.07709477054188414
+Filtration Rate: 0.33006366980337704
+
+k 10 perm 1024 threshold 0.04
+Total pairs: 473851.0, Expected Overlap: 21017, Total report: 80392, True Positive: 5605
+sensitivity 0.266688870914022
+FPR 0.16515323496027243
+accuracy 0.06972086774803463
+F1 0.11054245678391464
+Filtration Rate: 0.16965670643303485
+
+k 11 perm 512 threshold 0.01
+Total pairs: 473851.0, Expected Overlap: 21017, Total report: 349271, True Positive: 6948
+sensitivity 0.33058952276728365
+FPR 0.7559569290291807
+accuracy 0.01989286256230835
+F1 0.037527546126258485
+Filtration Rate: 0.7370903511863434
+
+k 10 perm 512 threshold 0.04
+Total pairs: 473851.0, Expected Overlap: 21017, Total report: 298951, True Positive: 6657
+sensitivity 0.31674358852357615
+FPR 0.645477150567316
+accuracy 0.022267863295322644
+F1 0.041610411041104106
+Filtration Rate: 0.6308966320636655
+
+question 3:
+k 12 perm 1024 threshold 0.005
+Total pairs: 233586.0, Expected Overlap: 22220, Total report: 112577, True Positive: 5631
+sensitivity 0.25342034203420344
+FPR 0.5059754170490997
+accuracy 0.05001909803956403
+F1 0.08354785343887476
+Filtration Rate: 0.48195097308914064
+
+k 11 perm 1024 threshold 0.01
+Total pairs: 233586.0, Expected Overlap: 22220, Total report: 165496, True Positive: 5629
+sensitivity 0.2533303330333033
+FPR 0.7563515418752307
+accuracy 0.03401290665635423
+F1 0.05997357710584073
+Filtration Rate: 0.7085013656640381

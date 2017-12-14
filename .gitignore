@@ -1,0 +1,8 @@
+
+*.gz
+*.aux
+*.xml
+*.pyc
+*.iml
+*.fasta
+*.fa

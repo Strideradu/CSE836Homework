@@ -1,0 +1,58 @@
+optimal number of band is 3, and each band have 4 hashing
+Frist hashing function is a = 775169054918279404 and b = 1758426461858698312, divisor is 2305843009213693951
+Signature vector is [4005303368 4290846341 1703301249 2876537340 3634877716 2252917204
+  986026652 3925436996 1849836273 3343156310 3447817223 2225448249]
+
+Frist hashing function is a = 775169054918279404 and b = 1758426461858698312, divisor is 2305843009213693951
+Signature vector is [3808290889 4183569548 3517292419 3065164290 3574749975 3625436121
+ 3536807325 4046572363 1380444918 3248330072 3287169547 3898623806]
+
+Frist hashing function is a = 775169054918279404 and b = 1758426461858698312, divisor is 2305843009213693951
+Signature vector is [  98973768  441755787  245669764  478253569  779415317  198283734
+   59674525   48417611   77630194  621852252 1169392648  195184444]
+
+
+query_id: r1 target_id: r1
+MinHash Estimated: 1.0
+Real Similarity 1.0
+Hamming distance of signature vector: 0.0
+
+query_id: r2 target_id: r1
+MinHash Estimated: 0.0
+Real Similarity 0.0
+Hamming distance of signature vector: 1.0
+
+query_id: r3 target_id: r1
+MinHash Estimated: 0.0
+Real Similarity 0.09090909090909091
+Hamming distance of signature vector: 1.0
+
+query_id: r1 target_id: r2
+MinHash Estimated: 0.0
+Real Similarity 0.0
+Hamming distance of signature vector: 1.0
+
+query_id: r2 target_id: r2
+MinHash Estimated: 1.0
+Real Similarity 1.0
+Hamming distance of signature vector: 0.0
+
+query_id: r3 target_id: r2
+MinHash Estimated: 0.0
+Real Similarity 0.09090909090909091
+Hamming distance of signature vector: 1.0
+
+query_id: r1 target_id: r3
+MinHash Estimated: 0.0
+Real Similarity 0.09090909090909091
+Hamming distance of signature vector: 1.0
+
+query_id: r2 target_id: r3
+MinHash Estimated: 0.0
+Real Similarity 0.09090909090909091
+Hamming distance of signature vector: 1.0
+
+query_id: r3 target_id: r3
+MinHash Estimated: 1.0
+Real Similarity 1.0
+Hamming distance of signature vector: 0.0

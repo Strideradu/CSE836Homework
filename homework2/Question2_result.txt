@@ -1,0 +1,35 @@
+k = 6, perm = 32
+[[ 70318   4245  24738]
+ [    75    287     56]
+ [ 72107   6568 260206]]
+For 438601 reads we generate 1358 clusters
+70.81% HCV reads classfied into right clusters (HCV dominated cluster)
+68.66% HGV reads classfied into right clusters (HGV dominated cluster)
+76.78% HIV reads classfied into right clusters (HIV dominated cluster)
+
+k = 8, perm = 32
+[[123000   2568   7481]
+ [   569   6427    750]
+ [ 18931   2105 276769]]
+For 438601 reads we generate 9503 clusters
+92.45% HCV reads classfied into right clusters (HCV dominated cluster)
+82.97% HGV reads classfied into right clusters (HGV dominated cluster)
+92.94% HIV reads classfied into right clusters (HIV dominated cluster)
+
+k = 10, perm = 32
+[[140683    282    863]
+ [   133  10701    171]
+ [  1684    117 283966]]
+For 438601 reads we generate 21902 clusters
+99.19% HCV reads classfied into right clusters (HCV dominated cluster)
+97.24% HGV reads classfied into right clusters (HGV dominated cluster)
+99.37% HIV reads classfied into right clusters (HIV dominated cluster)
+
+k = 12, perm = 32
+[[142416     18     48]
+ [     8  11068     19]
+ [    76     14 284933]]
+For 438601 reads we generate 26819 clusters
+99.95% HCV reads classfied into right clusters (HCV dominated cluster)
+99.76% HGV reads classfied into right clusters (HGV dominated cluster)
+99.97% HIV reads classfied into right clusters (HIV dominated cluster)

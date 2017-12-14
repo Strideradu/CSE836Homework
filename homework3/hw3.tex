@@ -1,0 +1,199 @@
+%=======================02-713 LaTeX template, following the 15-210 template==================
+%
+% You don't need to use LaTeX or this template, but you must turn your homework in as
+% a typeset PDF somehow.
+%
+% How to use:
+%    1. Update your information in section "A" below
+%    2. Write your answers in section "B" below. Precede answers for all 
+%       parts of a question with the command "\question{n}{desc}" where n is
+%       the question number and "desc" is a short, one-line description of 
+%       the problem. There is no need to restate the problem.
+%    3. If a question has multiple parts, precede the answer to part x with the
+%       command "\part{x}".
+%    4. If a problem asks you to design an algorithm, use the commands
+%       \algorithm, \correctness, \runtime to precede your discussion of the 
+%       description of the algorithm, its correctness, and its running time, respectively.
+%    5. You can include graphics by using the command \includegraphics{FILENAME}
+%
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+
+\newcommand*{\permcomb}[4][0mu]{{{}^{#3}\mkern#1#2_{#4}}}
+\newcommand*{\perm}[1][-3mu]{\permcomb[#1]{P}}
+\newcommand*{\comb}[1][-1mu]{\permcomb[#1]{C}}
+
+\newcommand\question[2]{\vspace{.25in}\hrule\textbf{#1: #2}\vspace{.5em}\hrule\vspace{.10in}}
+\renewcommand\part[1]{\vspace{.10in}\textbf{(#1)}}
+\newcommand\algorithmcode{\vspace{.10in}\textbf{Algorithm: }}
+\newcommand\correctness{\vspace{.10in}\textbf{Correctness: }}
+\newcommand\runtime{\vspace{.10in}\textbf{Running time: }}
+\pagestyle{fancyplain}
+\lhead{\textbf{\NAME\ (\ANDREWID)}}
+\chead{\textbf{HW\HWNUM}}
+\rhead{CSE 836, \today}
+
+\begin{document}\raggedright
+%Section A==============Change the values below to match your information==================
+\newcommand\NAME{Nan Du}  % your name
+\newcommand\ANDREWID{dunan}     % your andrew id
+\newcommand\HWNUM{3}              % the homework number
+%Section B==============Put your answers to the questions below here=======================
+
+% no need to restate the problem --- the graders know which problem is which,
+% but replacing "The First Problem" with a short phrase will help you remember
+% which problem this is when you read over your homeworks to study.
+
+\question{1}{Pseudo Code for Algorithm} 
+
+\part{a} 
+
+
+\begin{algorithm}[H]
+	\caption{Build Suffix Array}\label{suffixarray}
+	\begin{algorithmic}[1]
+		\Function{SA}{$s$}\Comment{String s as input}
+		\State satups$ \gets $ [empty array] 
+		\For{i in $ |s| $}
+			\State Add s[i:$ |s| $] to satups
+		\EndFor
+		\State sort the satups based on lexicographically order
+		\State SA[sort index] $ gets $ original suffix index
+		\State\Return SA
+		\EndFunction
+
+	\end{algorithmic}
+\end{algorithm}
+
+
+\part{b}
+
+\begin{algorithm}[H]
+	\caption{Convert Suffix Array To BWT}\label{bwt}
+	\begin{algorithmic}[1]
+		\Function{BWT}{$sa, text$}\Comment{Suffix array sa and the text as input}
+		\State bwt$ \gets $ [empty array] 
+		\For{i in $ |sa| $}
+			\State Add text[sa[i] - 1] to bwt
+		\EndFor
+		\State\Return bwt
+		\EndFunction
+
+	\end{algorithmic}
+\end{algorithm}
+
+\part{c}
+
+\begin{algorithm}[H]
+	\caption{Construct FM index's OCC}\label{fmocc}
+	\begin{algorithmic}[1]
+		\Function{rank}{$bwt$}\Comment{BWT bwt as input}
+		\State tots $ \gets $ new dict
+		\State ranks $ \gets $ new array
+		\For{c in bwt}
+		\If{c not in tots}
+		\State let tots[c]$ \gets $0
+		\EndIf
+		\State Add tots[c] to ranks
+		\State tots[c] $ \gets $tots[c]+1
+		\EndFor
+		\State\Return ranks, tots
+		\EndFunction
+		
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{Construct FM index's C}\label{fmc}
+	\begin{algorithmic}[1]
+		\Function{count}{$tots$}\Comment{tots as input}
+		\State totc $ \gets $ 0
+		\State first $ \gets $ new array
+		\State sort tots with its key
+		\For{c, count in tots}
+
+		\State first[c]$ \gets $ totc
+		\State totc $ \gets $ totc + count
+
+
+		\EndFor
+		\State\Return first
+		\EndFunction
+		
+	\end{algorithmic}
+\end{algorithm}
+	
+\part{d}
+
+\begin{algorithm}[H]
+	\caption{Update search range}\label{update}
+	\begin{algorithmic}[1]
+		\Function{Update}{$pi, start, end$}\Comment{Character pi, row index start, and row index end as input}
+		\State start$ \gets $ ranks(pi, start - 1) + first(pi)
+
+		\State end$ \gets $ ranks(pi, end) + first(pi) - 1
+
+		\State\Return start, end
+		\EndFunction
+		
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{Check if reach the end}\label{check}
+	\begin{algorithmic}[1]
+		\Function{Check}{$start, end$}\Comment{ow index start, and row index end as input}
+		\State range$ \gets $ suffixarray[start: end+1]
+		
+		\For{index in range}
+		\If {text[index - 1] $ = $ \$ } 
+		\State \Return index
+		\EndIf
+		\EndFor
+		\EndFunction
+		
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{Find overlap between pattern's prefix and index' suffix}\label{overlap}
+	\begin{algorithmic}[1]
+		\Function{Update}{$p, fmindex, threshold$}\Comment{Pattern p, FM index fmindex, and overlap threshold as input}
+		\State reverse input pattern p
+		\State start$ \gets $ 0
+		
+		\State end$ \gets $ length of indexed text -1
+		\State overlapsize$ \gets $ 0
+		
+		\For{c in reversed p}
+		\State start, end $ \gets $ Update(c, start, end)
+		\State overlapsize$ \gets $ overlapsize++
+		\If {overlapsize > threshold}
+		\State Check(start, end)
+		\If {Check return value} stop and return the overlap size
+		\EndIf
+		\EndIf
+		\EndFor
+		\EndFunction
+		
+	\end{algorithmic}
+\end{algorithm}
+
+\question{2}{Running Time}
+
+On HPCC, it took about 40 seconds using 1 thread to finish the all against all compare on the given HIV reads dataset
+
+\question{3}{Memory Usage}
+For the all against all compare on the given HIV reads dataset, my program use 131 MB memory
+
+
+\end{document}

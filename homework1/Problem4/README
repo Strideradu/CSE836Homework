@@ -1,0 +1,5 @@
+python main.py HBA_HUMAN HBB_HUMAN
+
+will return:
+Compare HBA_HUMAN with HBB_HUMAN: align score is 116.0
+Compare HBA_HUMAN with HBB_HUMAN: reverse align score is 116.0

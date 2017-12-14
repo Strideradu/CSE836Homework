@@ -1,0 +1,202 @@
+%=======================02-713 LaTeX template, following the 15-210 template==================
+%
+% You don't need to use LaTeX or this template, but you must turn your homework in as
+% a typeset PDF somehow.
+%
+% How to use:
+%    1. Update your information in section "A" below
+%    2. Write your answers in section "B" below. Precede answers for all 
+%       parts of a question with the command "\question{n}{desc}" where n is
+%       the question number and "desc" is a short, one-line description of 
+%       the problem. There is no need to restate the problem.
+%    3. If a question has multiple parts, precede the answer to part x with the
+%       command "\part{x}".
+%    4. If a problem asks you to design an algorithm, use the commands
+%       \algorithm, \correctness, \runtime to precede your discussion of the 
+%       description of the algorithm, its correctness, and its running time, respectively.
+%    5. You can include graphics by using the command \includegraphics{FILENAME}
+%
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\newcommand*{\permcomb}[4][0mu]{{{}^{#3}\mkern#1#2_{#4}}}
+\newcommand*{\perm}[1][-3mu]{\permcomb[#1]{P}}
+\newcommand*{\comb}[1][-1mu]{\permcomb[#1]{C}}
+
+\newcommand\question[2]{\vspace{.25in}\hrule\textbf{#1: #2}\vspace{.5em}\hrule\vspace{.10in}}
+\renewcommand\part[1]{\vspace{.10in}\textbf{(#1)}}
+\newcommand\algorithmcode{\vspace{.10in}\textbf{Algorithm: }}
+\newcommand\correctness{\vspace{.10in}\textbf{Correctness: }}
+\newcommand\runtime{\vspace{.10in}\textbf{Running time: }}
+\pagestyle{fancyplain}
+\lhead{\textbf{\NAME\ (\ANDREWID)}}
+\chead{\textbf{HW\HWNUM}}
+\rhead{CSE 836, \today}
+
+\begin{document}\raggedright
+%Section A==============Change the values below to match your information==================
+\newcommand\NAME{Nan Du}  % your name
+\newcommand\ANDREWID{dunan}     % your andrew id
+\newcommand\HWNUM{1}              % the homework number
+%Section B==============Put your answers to the questions below here=======================
+
+% no need to restate the problem --- the graders know which problem is which,
+% but replacing "The First Problem" with a short phrase will help you remember
+% which problem this is when you read over your homeworks to study.
+
+\question{1}{Number of global alignments given two $ n $ reads} 
+
+\part{a} 
+
+Given two sequence with length $ n $, there are several different situations: 
+
+All $ n $ bases in one sequences align to "-", so this means all bases in the other one will also align to "-". So we only need to choose n position from all 2n positions, which is $ \comb{2n}{n} $. 
+
+Then we discuss if there is only one base from each reads align together. So we should have 2n - 1 positions now and we still need to select n position to host one read. This give us $ \comb{2n-1}{n} $. However, in the other read there are n-1 bases need to align to gap, and we need to determine by using $ \comb{n}{n - 1} $. So for this case we finally have $\comb{n}{n - 1} \cdot \comb{2n-1}{n} $
+
+Then next case is we have two bases from each reads align together. Following the above discussion, so we have $\comb{n}{n - 2} \cdot \comb{2n-2}{n} $ 
+
+Considering all cases, so the number of global alignments is given by:
+
+\[ \comb{2n}{n} + \comb{n}{n - 1} \cdot \comb{2n-1}{n} + \comb{n}{n - 2} \cdot \comb{2n-2}{n} + ... + \comb{n}{1} \cdot \comb{n+ 1}{n} + \comb{n}{0} \cdot \comb{n}{n} \]
+
+\part{b}
+
+For "AG" and "CT":
+
+\begin{enumerate}
+	\item - -AG
+	
+	CT- -
+	\item AG- -
+
+    - -CT
+	\item A-G-
+
+    -C-T
+	\item A- -G
+
+    -CT-
+	\item -A-G
+
+    C-T-
+	\item -AG-
+
+    C- -T
+	\item-AG
+
+    CT-
+	\item AG-
+
+    -CT
+	\item A-G
+
+    CT-
+	\item AG-
+
+    C-T
+	\item A-G
+	
+	-CT
+	\item -AG
+	
+	C-T
+    \item AG
+    
+    CT
+	
+\end{enumerate}
+
+\question{2}{Align with sequence with N}
+
+\algorithmcode Assume we have read a and read b, and read b has Ns in the sequence.
+
+
+\begin{algorithmic}
+	\State read $ \mathbf{a} $ and $ \mathbf{b} $ with Ns
+	\State $\mathbf{score}[m+1][n+1]$ \Comment{Initialize DP score matrix}
+	\State $ \mathbf{N}[m+1][n+1] $ \Comment{matrix to record choice of Ns}
+	\\
+	\State $score[0][0] \gets 0$
+	
+	\For{$ i \gets 1 $ to $ m $} 
+		\State$  score[i][0] \gets score[i-1][0] - gappenalty $
+	\EndFor
+	\For{$ j \gets 1 $ to $ n $}
+	\State$  score[0][j] \gets score[0][j-1] - gappenalty $
+	\EndFor
+	\\
+	\For{$ i \gets 1 $ to $ m $} 
+		\For{$ j \gets 1 $ to $ n $} 
+			\If{$ \mathbf{b}[j] $ == N}
+			\State $\mathbf{score}[i][j] = \max (\mathbf{score}[i-1][j-1] + match, \mathbf{score}[i][j-1] -gappenalty, \mathbf{score}[i-1][j] -gappenalty )$ given N can be A,T,C,G
+			\Comment{So there is 4 times 3 options}
+			\State $ \mathbf{N}[i][j]=\arg \max\mathbf{score}[i][j]  $ for A, T, C, G
+			\Else
+			\State $\mathbf{score}[i][j]$ is the max of match(mismatch), insertion, and deletion
+			\Comment{only 3 options without N}
+			\EndIf
+		\EndFor
+	\EndFor
+	\\
+	\State{$ i \gets m+1$, $j \gets n+1 $}
+	\While{$ i \geq 0 $, $ j\geq 0 $}
+	\State i,j $ \gets $ pointer from $ \mathbf{score}[i][j] $ to the previous cell given the maximum score
+	\Comment{ backtrack}
+	\If{$ \mathbf{b}[j] $ == N}
+	\State $ \mathbf{b}[j] \gets \mathbf{N}[i][j] $
+	\EndIf
+	\EndWhile
+
+\end{algorithmic}
+
+\runtime Although we need to try A,C,G,T for each N. we only times a small constant to $ M\cdot N $. So the running time is still $ \mathcal{O}(MN) $
+
+\question{3}{Overlap Alignment}
+
+\algorithmcode Assume we have two read w, v. And we want to find overlap between the suffix of v and the prefix of w.
+
+
+\begin{algorithmic}
+
+	\State $\mathbf{score}[m+1][n+1]$ \Comment{Initialize DP score matrix}
+	\\
+	\State $score[0][0] \gets 0$	
+	\For{$ i \gets 1 $ to $ m $} 
+	\State$  score[i][0] \gets 0 $
+	\EndFor
+	\For{$ j \gets 1 $ to $ n $}
+	\State$  score[0][j] \gets 0 $
+	\EndFor
+	\\
+	\For{$ i \gets 1 $ to $ m $} 
+	\For{$ j \gets 1 $ to $ n $} 
+
+	\State $\mathbf{score}[i][j]$ is the max of match(mismatch), insertion, and deletion
+
+	\EndFor
+	\EndFor
+	\\
+	\State{$ i \gets $the highest score in the n+1 column (or smallest i if has more than two highest scores), $j \gets n + 1$ }
+	\While{$ i \geq 0 $ and $ j\geq 0 $}
+	\State i,j $ \gets $ pointer from $ \mathbf{score}[i][j] $ to the previous cell given the maximum score
+	\Comment{ backtrack}
+	\EndWhile
+	\State the final alignment is the optimal alignment to align the suffix of v to the prefix of w
+	
+\end{algorithmic}
+
+\correctness There are two major modification compared to the global alignment algorithm.
+
+First, we remove the penalty for the first row and first column so we can have the alignment not start from the beginning of the sequence, then we can align other sequence to suffix.
+
+Second, we start our backtrack from highest score in last column so that we do have optimal overlap alignment.
+\end{document}
