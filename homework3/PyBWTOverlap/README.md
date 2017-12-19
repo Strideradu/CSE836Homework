@@ -28,7 +28,7 @@
 
 
 
-#### Output Format
+query id, query start, query end, target id, target start, target end, overlap size, direction of query#### Output Format
 The output of program has following fields and using tab delimited
 
-    query id, query start, query end, target id, target start, target end, overlap size, direction of query
+    

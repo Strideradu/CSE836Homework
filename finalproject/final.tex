@@ -1,0 +1,150 @@
+%=======================02-713 LaTeX template, following the 15-210 template==================
+%
+% You don't need to use LaTeX or this template, but you must turn your homework in as
+% a typeset PDF somehow.
+%
+% How to use:
+%    1. Update your information in section "A" below
+%    2. Write your answers in section "B" below. Precede answers for all 
+%       parts of a question with the command "\question{n}{desc}" where n is
+%       the question number and "desc" is a short, one-line description of 
+%       the problem. There is no need to restate the problem.
+%    3. If a question has multiple parts, precede the answer to part x with the
+%       command "\part{x}".
+%    4. If a problem asks you to design an algorithm, use the commands
+%       \algorithm, \correctness, \runtime to precede your discussion of the 
+%       description of the algorithm, its correctness, and its running time, respectively.
+%    5. You can include graphics by using the command \includegraphics{FILENAME}
+%
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{listings}
+
+\newcommand*{\permcomb}[4][0mu]{{{}^{#3}\mkern#1#2_{#4}}}
+\newcommand*{\perm}[1][-3mu]{\permcomb[#1]{P}}
+\newcommand*{\comb}[1][-1mu]{\permcomb[#1]{C}}
+
+\newcommand\question[2]{\vspace{.25in}\hrule\textbf{#1: #2}\vspace{.5em}\hrule\vspace{.10in}}
+\renewcommand\part[1]{\vspace{.10in}\textbf{(#1)}}
+\newcommand\algorithmcode{\vspace{.10in}\textbf{Algorithm: }}
+\newcommand\correctness{\vspace{.10in}\textbf{Correctness: }}
+\newcommand\runtime{\vspace{.10in}\textbf{Running time: }}
+\pagestyle{fancyplain}
+\lhead{\textbf{\NAME\ (\ANDREWID)}}
+\chead{\textbf{HW\HWNUM}}
+\rhead{CSE 836, \today}
+
+\begin{document}\raggedright
+%Section A==============Change the values below to match your information==================
+\newcommand\NAME{Nan Du}  % your name
+\newcommand\ANDREWID{dunan}     % your andrew id
+\newcommand\HWNUM{ Final Project}              % the homework number
+%Section B==============Put your answers to the questions below here=======================
+
+% no need to restate the problem --- the graders know which problem is which,
+% but replacing "The First Problem" with a short phrase will help you remember
+% which problem this is when you read over your homeworks to study.
+
+\question{1}{} 
+
+I used the default parameters for bowtie2-build and bowtie2.
+
+For bowtie2-build:
+--bmaxdivn 4
+--dcv 1024
+--offrate 5
+--ftabchars 10
+
+And the command for build index:
+\begin{center}
+	\begin{tabular}{c}
+		\begin{lstlisting}[language=bash]
+bowtie2-build HCV_gene.fa HCV_index
+		\end{lstlisting}
+	\end{tabular}
+\end{center}
+
+
+For bowtie2:
+-N 0
+-L 22
+-i (S,1,1.15)
+-D 15
+-R 2
+
+
+And the command for build align:
+\begin{center}
+	\begin{tabular}{c}
+		\begin{lstlisting}[language=bash]
+bowtie2 -f -x HCV_index -U virus.fa -S virus.sam
+		\end{lstlisting}
+	\end{tabular}
+\end{center}
+
+
+After apply bowtie2, there are 1249 reads can be aligned to the references in HCV\_genes. And there are 864 reads can be aligned to the references in HIV\_genes
+
+\question{2}{}
+
+
+
+
+
+\part{a}
+
+I create BWT index from suffix array. I first recruited all suffix for the input reads, then sorted them. After sort, I constructed bwt by finding the previous character for suffix array index. the main bottleneck for this process is to sort all input reads. Assume we have N reads and the average read length is K, directly sort will give us $\mathcal{O}(NK\log NK ) $. 
+
+\part{b}
+
+To recruit all overlapped reads, I first create a set in Python3. At each iteration, I will test whether the reported overlapped reads from my program in the set or not (this is $ \mathcal{O}(1) $). So I will only add those reads that not already in the set. I also create a separate set to record all the reads I found in this iteration, so next iteration I only need to use these reads in the set to serve as the query read for BWT.
+
+For the HIV\_gene, my program found 19000 reads. And for the HCV\_gene, my program found 28500 reads. Noticed that actually there are two reference genes in HCV\_gene.fa. If I only use the real HCV\_gene, my program will return 9500 reads. The number is exactly the difference of the number of the run for those two files. I test several different threshold, only when threshold is too high (like 249) the number of reads I recruited will drop. This suggest the result is consistent as the threshold should not impact the relationship between reads is the two gene not share great similarities.
+
+
+
+
+\question{3}{}
+
+I use the default parameters for IDBAUD 1.1.1 .
+
+The default parameers are list here:
+--mink 20\\
+--maxk 100\\
+--step 20\\
+--inner\_mink 10\\
+--inner\_step 5\\
+
+
+And the command for assemble:
+\begin{center}
+	\begin{tabular}{c}
+		\begin{lstlisting}[language=bash]
+		idba_ud -r XXX.fasta -o result/
+		\end{lstlisting}
+	\end{tabular}
+\end{center}
+
+\part{a}
+
+For HIV reads, I only have 1 contig and the read length is 9144. Compared to the reference gene (using BLAST), the assembled contig can cover the whole gene and got 100\%identity
+
+\part{b}
+For HCV reads, I have 2 contigs and the read length are 9467, 9144. So the N50 is 9467 and mean is 9305. Compared to the reference gene (using BLAST), the assembled HCV contig (There is contig for HIV) can cover the whole gene and got 100\%identity.
+
+\question{4}{}
+
+I also compare bewteen the contigs generated from different pipeline( using BWT or directly use IDBAUD). The BLAST result show that the contig is 100\% identity and 100\%cover. So the result is same.
+
+
+
+\end{document}
