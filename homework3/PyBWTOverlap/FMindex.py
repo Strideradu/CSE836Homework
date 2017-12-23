@@ -125,26 +125,6 @@ class FMindex(object):
         r = self.cps.rank(self.bwt, p_i, r) + self.count(p_i) - 1
         return l, r
 
-    def find_offset(self, row):
-        ''' Given BWM row, return its offset w/r/t T '''
-
-        def stepLeft(row):
-            ''' Step left according to character in given BWT row '''
-            c = self.bwt[row]
-            return self.cps.rank(self.bwt, c, row - 1) + self.count(c)
-
-        nsteps = 0
-        while row not in self.suffix_array:
-            row = stepLeft(row)
-            nsteps += 1
-        return self.suffix_array[row] + nsteps
-
-    def hasSuffix(self, p):
-        ''' Return true if and only if p is suffix of indexed text '''
-        l, r = self.range(p)
-        off = self.find_offset(l)
-        return off, len(p)
-
     def find_sep(self, start, end):
         indices = self.suffix_array[start:end + 1]
         result = []
@@ -153,6 +133,7 @@ class FMindex(object):
                 result.append((i, self.sa_id[start + idx]))
 
         return result
+
 
     # in this function we backtrace the given pattern through the index
     # checking for prefixes at every step (indicated by '$')
@@ -165,18 +146,20 @@ class FMindex(object):
         overlap_size = 0
         all_overlaps = []
         for c in rs:
+            if start > end:
+                break
+            if min_overlap_len <= overlap_size < len(p):
+                # check if our search reach the end
+                dstart, dend = self.update_range('$', start, end)
+
+                if dstart <= dend:
+                    offs = self.find_sep(start, end)
+                    for off, read_idx in offs:
+                        all_overlaps.append([p_id, str(len(p) - overlap_size ), str(len(p) - 1), self.ids[read_idx], str(0), str(overlap_size - 1), str(overlap_size)])
 
             start, end = self.update_range(c, start, end)
             # print(c, start, end)
             overlap_size += 1
-            if start > end:
-                break
-            if min_overlap_len <= overlap_size < len(p):
-                offs = self.find_sep(start, end)
-                # print(offs)
-
-                for off, read_idx in offs:
-                    all_overlaps.append([p_id, str(len(p) - overlap_size ), str(len(p) - 1), self.ids[read_idx], str(0), str(overlap_size - 1), str(overlap_size)])
 
         return all_overlaps
 
